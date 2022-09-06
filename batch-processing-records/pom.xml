@@ -50,6 +50,9 @@
 			<artifactId>spring-batch-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Thanks for using https://jar-download.com -->
+
 	</dependencies>
 
 	<build>
