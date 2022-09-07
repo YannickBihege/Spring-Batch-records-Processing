@@ -18,6 +18,8 @@ import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Repository;
 
 @Configuration
@@ -45,7 +47,9 @@ public class SpringBatchConfig {
         DelimitedLineTokenizer delimitedLineTokenizer = new DelimitedLineTokenizer();
         delimitedLineTokenizer.setDelimiter(",");
         delimitedLineTokenizer.setStrict(false);
-        delimitedLineTokenizer.setNames("id","Entity", "Code", "Year", "Primary energy consumption (TWh)");
+        delimitedLineTokenizer.setNames( "id","Entity", "Code", "Year", "Primary energy consumption (TWh)");
+
+//        delimitedLineTokenizer.setNames("id","Entity", "Code", "Year", "Primary energy consumption (TWh)");
 
         BeanWrapperFieldSetMapper<Country> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
         fieldSetMapper.setTargetType(Country.class);
@@ -74,14 +78,24 @@ public class SpringBatchConfig {
                 .reader(reader())
                 .processor(processor())
                 .writer(writer())
+                .taskExecutor(taskExecutor())
                 .build();
     }
 
     @Bean
-    public Job runob() {
+    public Job runJob() {
         return jobBuilderFactory.get("importCountries")
                 .flow(step1()).end().build();
         // .next()
     }
+
+    @Bean
+    public TaskExecutor taskExecutor(){
+        SimpleAsyncTaskExecutor asyncTaskExecutor = new SimpleAsyncTaskExecutor();
+        asyncTaskExecutor.setConcurrencyLimit(10);
+        return asyncTaskExecutor;
+
+    }
+
 
 }
