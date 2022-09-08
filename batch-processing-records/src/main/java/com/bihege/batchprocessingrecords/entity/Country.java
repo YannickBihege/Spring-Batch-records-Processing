@@ -10,14 +10,16 @@ import javax.persistence.*;
 @Table(name = "COUNTRY_INFO")
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor //This can be problematic if you need the arguments
 public class Country {
 
+    /* Continue video 36 minutes
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "COUNTRY_ID")
     private int id;
-
+    */
+    @Id
     @Column(name = "ENTITY")
     private String entity;
 

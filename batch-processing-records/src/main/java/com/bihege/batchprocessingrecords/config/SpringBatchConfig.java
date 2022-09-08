@@ -44,10 +44,11 @@ public class SpringBatchConfig {
 
     private LineMapper<Country> lineMapper() {
         DefaultLineMapper<Country> lineMapper = new DefaultLineMapper<>();
+
         DelimitedLineTokenizer delimitedLineTokenizer = new DelimitedLineTokenizer();
         delimitedLineTokenizer.setDelimiter(",");
         delimitedLineTokenizer.setStrict(false);
-        delimitedLineTokenizer.setNames( "id","Entity", "Code", "Year", "Primary energy consumption (TWh)");
+        delimitedLineTokenizer.setNames( "Entity", "Code", "Year", "Primary energy consumption (TWh)");
 
 //        delimitedLineTokenizer.setNames("id","Entity", "Code", "Year", "Primary energy consumption (TWh)");
 
@@ -74,11 +75,11 @@ public class SpringBatchConfig {
 
     @Bean
     public Step step1() {
-        return stepBuilderFactory.get("csv-step").<Country, Country>chunk(60)
+        return stepBuilderFactory.get("csv-step").<Country, Country>chunk(1000)
                 .reader(reader())
                 .processor(processor())
                 .writer(writer())
-                .taskExecutor(taskExecutor())
+               // .taskExecutor(taskExecutor())
                 .build();
     }
 
